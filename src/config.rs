@@ -15,35 +15,7 @@ pub struct Config {
 }
 
 pub fn get_config() -> Config {
-    let matches = clap::Command::new("sillyx")
-        .version("1.0")
-        .about("Sillyx - blazingly based Nginx alternative, written on rust.")
-        .arg(
-            Arg::new("php_fpm_port")
-                .long("php-fpm-port")
-                .default_value("9000")
-                .help("The port of the PHP-FPM server"),
-        )
-        .arg(
-            Arg::new("php_fpm_ip")
-                .long("php-fpm-address")
-                .default_value("127.0.0.1")
-                .help("The address of the PHP-FPM server"),
-        )
-        .arg(
-            Arg::new("root_dir")
-                .long("root-dir")
-                .default_value("/var/www/html")
-                .help("The root directory for the PHP files"),
-        )
-        .arg(
-            Arg::new("server_addr")
-                .short('s')
-                .long("server-addr")
-                .default_value("127.0.0.1:1489")
-                .help("Salvo listening address"),
-        )
-        .get_matches();
+    let matches = cli_matches();
 
     Config {
         salvo_addr: matches
@@ -64,4 +36,37 @@ pub fn get_config() -> Config {
             .parse::<u16>()
             .expect("Port must be an u16 number"),
     }
+}
+
+fn cli_matches() -> clap::ArgMatches {
+    clap::Command::new("sillyx")
+        .version("1.0")
+        .about("Sillyx - blazingly based Nginx alternative, written on rust.")
+        .arg(
+            Arg::new("php_fpm_port")
+                .long("php-fpm-port")
+                .default_value("9000")
+                .help("The port of the PHP-FPM server"),
+        )
+        .arg(
+            Arg::new("php_fpm_ip")
+                .long("php-fpm-address")
+                .default_value("127.0.0.1")
+                .help("The address of the PHP-FPM server"),
+        )
+        .arg(
+            Arg::new("root_dir")
+                .long("root-dir")
+                .default_value("/usr/share/webapps/wordpress/")
+                // .default_value("/var/www/html/")
+                .help("The root directory for the PHP files"),
+        )
+        .arg(
+            Arg::new("server_addr")
+                .short('s')
+                .long("server-addr")
+                .default_value("127.0.0.1:1489")
+                .help("Salvo listening address"),
+        )
+        .get_matches()
 }
